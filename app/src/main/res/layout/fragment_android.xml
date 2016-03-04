@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:fresco="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/fl_content"
+    >
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyleview_android"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@color/white_gray"/>
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/expanded_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        fresco:roundedCornerRadius = "4dp"
+        fresco:retryImageScaleType="focusCrop"
+        />
+</FrameLayout>
