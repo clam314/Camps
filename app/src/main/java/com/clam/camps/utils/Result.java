@@ -1,9 +1,11 @@
 package com.clam.camps.utils;
 
+import java.util.Objects;
+
 /**
  * Created by clam314 on 2016/3/2.
  */
-public class Result {
+public final class Result {
     private String _id; //唯一标识
     private String desc;//资源说明
     private String who;//提供者
@@ -47,5 +49,23 @@ public class Result {
     }
     public void setType(String type){
         this.type = type;
+    }
+
+    @Override
+    public int hashCode() {
+        return this._id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == null){
+            return false;
+        }else if(o==this){
+            return true;
+        }else if(!(o instanceof Result)) {
+           return false;
+        }
+        Result f = (Result)o;
+        return  (Objects.equals(f.get_id(), this.get_id()));
     }
 }

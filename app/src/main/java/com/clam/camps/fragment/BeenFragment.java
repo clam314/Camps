@@ -6,19 +6,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.clam.camps.R;
-import com.clam.camps.adapter.AndroidRecycleViewAdapter;
 import com.clam.camps.adapter.BeenRecyclerViewAdapter;
 import com.clam.camps.models.Constants;
 import com.clam.camps.models.DataBase;
-import com.clam.camps.utils.Actegory;
+import com.clam.camps.utils.Category;
 import com.clam.camps.utils.OkHttpUtil;
 import com.clam.camps.utils.Result;
 import com.clam.camps.utils.Util;
@@ -41,17 +40,20 @@ public class BeenFragment extends Fragment {
     private DataBase dataBase;
     private List<Result> results;
     private String query_category;
-    private String query_category_ramdon;
-
+    private String query_category_random;
+    private boolean random;
+    private GridLayoutManager gridLayoutManager;
+    private int page = 1;
 
     public BeenFragment(){
 
     }
 
     @SuppressLint("ValidFragment")
-    public BeenFragment(String category){
+    public BeenFragment(String category,boolean random){
         query_category = Constants.REQUEST_CATEGORY+category+"/10/";
-        query_category_ramdon = Constants.REQUEST_CATEGORY_RANDOM+category+"/";
+        query_category_random = Constants.REQUEST_CATEGORY_RANDOM+category+"/";
+        this.random = random;
     }
 
     @Override
@@ -59,11 +61,7 @@ public class BeenFragment extends Fragment {
         super.onAttach(context);
         dataBase = DataBase.getDataBase(getContext());
         gson = new Gson();
-        try {
-            OkHttpUtil.execute(queryAndroidData(1), getCallback());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        refresh();
     }
 
     @Nullable
@@ -71,28 +69,26 @@ public class BeenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_android,container,false);
         results = null;
-        // List<String> hasData = dataBase.loadData("Last","response");
-        //   if(hasData.size() != 0){
-        //     results = gson.fromJson(hasData.get(0),Results.class);
-        // }
         recyclerView = (RecyclerView)view.findViewById(R.id.recyleview_android);
-       // recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+        gridLayoutManager = new GridLayoutManager(getActivity(),2);
         adapter = new BeenRecyclerViewAdapter(getActivity(),results,this);
+        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
+       if (!random){
+        recyclerView.addOnScrollListener(new RecyclerViewScrollListener());
+       }
         return view;
     }
 
 
-    public View getMView(){
-        return view;
-    }
+
+
     private Request queryAndroidData(int page){
         return new Request.Builder().url(query_category+page).build();
     }
 
-    private Request querRandomData(int num){
-        return new Request.Builder().url(query_category_ramdon+num).build();
+    private Request queryRandomData(int num){
+        return new Request.Builder().url(query_category_random +num).build();
     }
 
     private Callback getCallback(){
@@ -107,7 +103,7 @@ public class BeenFragment extends Fragment {
                 if (response.isSuccessful()) {
                     String decode = Util.decodeUnicode(response.body().string());
                     // Log.d("result","decode "+decode);
-                    Actegory results = gson.fromJson(decode, Actegory.class);
+                    Category results = gson.fromJson(decode, Category.class);
                     if (results.results.size()!=0) {
                         adapter.setList(results.results);
                         getActivity().runOnUiThread(new Runnable() {
@@ -122,4 +118,73 @@ public class BeenFragment extends Fragment {
             }
 
         };
-    }}
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        page = 1;
+    }
+
+    private class RecyclerViewScrollListener extends RecyclerView.OnScrollListener{
+        private boolean loading = false;
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            int lastVisibleItem = gridLayoutManager.findLastVisibleItemPosition();
+            final int totalItemCount = gridLayoutManager.getItemCount();
+            if(!loading && lastVisibleItem*2 >= totalItemCount-1){
+                Log.d("scroll","scroll "+totalItemCount+" "+lastVisibleItem);
+                loading = true;
+                try {
+                    Request request = queryAndroidData(++page);
+                    OkHttpUtil.execute(request, new Callback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
+                            Toast.makeText(getActivity(), "没有网络", Toast.LENGTH_SHORT).show();
+                            loading = false;
+                            page--;
+                        }
+
+                        @Override
+                        public void onResponse(Response response) throws IOException {
+                            if (!isAdded()) return ;
+                            if (response.isSuccessful()) {
+                                loading = false;
+                                String decode = Util.decodeUnicode(response.body().string());
+                                Category results = gson.fromJson(decode, Category.class);
+                                if (results.results.size()!=0) {
+                                    adapter.addList(results.results);
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            adapter.notifyItemInserted(totalItemCount);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }else if (totalItemCount - 1 <= lastVisibleItem){
+                Toast.makeText(getActivity(),"没有更多了~",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void refresh(){
+        try {
+            if(random){
+                OkHttpUtil.execute(queryRandomData(20), getCallback());
+            }else {
+                page = 1;
+                OkHttpUtil.execute(queryAndroidData(1), getCallback());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+}

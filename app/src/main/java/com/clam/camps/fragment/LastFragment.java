@@ -51,11 +51,7 @@ public class LastFragment extends Fragment  {
         super.onAttach(context);
         dataBase = DataBase.getDataBase(getContext());
         gson = new Gson();
-        try {
-            OkHttpUtil.execute(queryTodayData(),getCallback());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        refresh();
     }
 
     @Nullable
@@ -121,5 +117,13 @@ public class LastFragment extends Fragment  {
             }
 
         };
+    }
+
+    public void refresh(){
+        try {
+            OkHttpUtil.execute(queryTodayData(),getCallback());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

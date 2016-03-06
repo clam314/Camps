@@ -30,6 +30,9 @@ import com.clam.camps.fragment.MainFragment;
 import com.clam.camps.utils.Result;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -42,18 +45,26 @@ public class BeenRecyclerViewAdapter extends RecyclerView.Adapter {
     private List<Result> list;
     private LayoutInflater inflater;
     private BeenFragment beenFragment;
+    private SimpleDraweeView expandedImageView;
+
 
 
     public BeenRecyclerViewAdapter(Activity activity,List<Result> list,BeenFragment beenFragment){
         this.activity = activity;
-        this.list = list;
+        if(list!=null) {
+            this.list = list;
+        }else {
+            this.list = new ArrayList<>();
+        }
         inflater = LayoutInflater.from(activity);
         this.beenFragment = beenFragment;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ImageCardHolder(inflater.inflate(R.layout.card_been,parent,false));
+        expandedImageView = (SimpleDraweeView) beenFragment.getView().findViewById(R.id.expanded_image);
+        return new ImageCardHolder(inflater.inflate(R.layout.card_been,null));
+
     }
 
     @Override
@@ -76,13 +87,19 @@ public class BeenRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public void setList(List<Result> list){
-        this.list = list;
+        this.list.clear();
+        for(Result r : list){
+            if (Collections.frequency(this.list,r) < 1) this.list.add(r);
+        }
     }
 
-    private class ImageCardHolder extends RecyclerView.ViewHolder{
+    public void addList(List<Result> list){
+        this.list.addAll(list);
+    }
+
+    private static class ImageCardHolder extends RecyclerView.ViewHolder{
 
         public SimpleDraweeView draweeView;
-       // public ImageView iv_background;
         public TextView tv_who;
         public TextView tv_date;
 
@@ -101,8 +118,7 @@ public class BeenRecyclerViewAdapter extends RecyclerView.Adapter {
         }
 
         // 加载高分辨率的放大图片
-        final SimpleDraweeView expandedImageView = (SimpleDraweeView) beenFragment.getView().findViewById(
-                R.id.expanded_image);
+
        // expandedImageView.setImageResource(R.drawable.page1);
         expandedImageView.setImageURI(uri);
         if (expandedImageView==null) Log.i("animator","expandedImageView==null");

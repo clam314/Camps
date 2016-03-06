@@ -11,17 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.clam.camps.R;
 import com.clam.camps.adapter.AndroidRecycleViewAdapter;
-import com.clam.camps.adapter.LastRecyclerViewAdapter;
 import com.clam.camps.models.Constants;
 import com.clam.camps.models.DataBase;
-import com.clam.camps.utils.Actegory;
+import com.clam.camps.utils.Category;
 import com.clam.camps.utils.OkHttpUtil;
 import com.clam.camps.utils.Result;
-import com.clam.camps.utils.Results;
 import com.clam.camps.utils.Util;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
@@ -29,14 +26,12 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by clam314 on 2016/3/3.
  */
-public class AndroidFragment extends Fragment {
+public class CategoryFragment extends Fragment {
     private Gson gson;
     private RecyclerView recyclerView;
     private AndroidRecycleViewAdapter adapter;
@@ -46,12 +41,12 @@ public class AndroidFragment extends Fragment {
     private String query_category;
 
 
-    public AndroidFragment(){
+    public CategoryFragment(){
 
     }
 
     @SuppressLint("ValidFragment")
-    public AndroidFragment(String category){
+    public CategoryFragment(String category){
         query_category = Constants.REQUEST_CATEGORY+category+"/10/";
     }
 
@@ -60,11 +55,7 @@ public class AndroidFragment extends Fragment {
         super.onAttach(context);
         dataBase = DataBase.getDataBase(getContext());
         gson = new Gson();
-        try {
-            OkHttpUtil.execute(queryAndroidData(1), getCallback());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        refresh();
     }
 
     @Nullable
@@ -83,15 +74,18 @@ public class AndroidFragment extends Fragment {
         return view;
     }
 
-
+    @Override
+    public void onStop() {
+        Log.d("Fragment", "androidFragment onstop");
+        super.onStop();
+        recyclerView.removeAllViews();
+    }
 
     private Request queryAndroidData(int page){
         return new Request.Builder().url(query_category+page).build();
     }
 
-    public void setCategory(String category){
-        query_category = Constants.REQUEST_CATEGORY+category+"/10/";
-    }
+
 
     private Callback getCallback(){
         return   new Callback() {
@@ -105,20 +99,30 @@ public class AndroidFragment extends Fragment {
                 if (response.isSuccessful()) {
                     String decode = Util.decodeUnicode(response.body().string());
                    // Log.d("result","decode "+decode);
-                    Actegory results = gson.fromJson(decode, Actegory.class);
+                    Category results = gson.fromJson(decode, Category.class);
                     if (results.results.size()!=0) {
                         adapter.setList(results.results);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
+                        if (getActivity()!=null){
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
                     }
                 }
 
             }
 
         };
+    }
+
+    public void refresh(){
+        try {
+            OkHttpUtil.execute(queryAndroidData(1), getCallback());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

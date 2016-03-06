@@ -19,59 +19,59 @@
         android:foreground="?attr/selectableItemBackground" >
 
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
-
-
-    <TextView
-        android:id="@+id/tv_who"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/blue"
-        android:text="11111"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"/>
+        >
 
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white_dark"
-        android:text="222"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="false"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="14sp"/>
 
-    <TextView
-        android:id="@+id/tv_desc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:text="333333333333333333"
-        android:layout_alignParentBottom="false"
-        android:layout_below="@+id/tv_who"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="16dp"
-        android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/tv_who"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue"
+            android:text="11111"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"/>
 
-    <ImageView
-        android:id="@+id/iv_star"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/iconfont_star"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_below="@+id/tv_time"
-        android:layout_marginTop="16dp"
-        />
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_dark"
+            android:text="222"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="false"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="14sp"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="333333333333333333"
+            android:layout_alignParentBottom="false"
+            android:layout_below="@+id/tv_who"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="18sp"/>
+
+        <ImageView
+            android:id="@+id/iv_star"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/iconfont_star"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:layout_below="@+id/tv_time"
+            android:layout_marginTop="16dp"
+            />
+
+    </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

@@ -8,30 +8,30 @@
         <item
             android:checked="true"
             android:id="@+id/homepage"
-            android:icon="@mipmap/ic_home_grey600_24dp"
+            android:icon="@mipmap/ic_format_list_bulleted_blue_700_24dp"
             android:title="首页"/>
 
         <item
             android:id="@+id/collection"
-            android:icon="@mipmap/ic_folder_grey600_24dp"
+            android:icon="@mipmap/ic_turned_in_amber_a700_24dp"
             android:title="收藏"/>
 
         <item
 
             android:id="@+id/been"
-            android:icon="@mipmap/ic_loyalty_grey600_24dp"
-            android:title="福利"/>
+            android:icon="@mipmap/ic_explore_light_green_a200_24dp"
+            android:title="随机图"/>
     </group>
     <group
         android:id="@+id/group2"
         android:checkableBehavior="single">
                 <item
                     android:id="@+id/settings"
-                    android:icon="@mipmap/ic_settings_grey600_24dp"
+                    android:icon="@mipmap/ic_settings_brown_600_24dp"
                     android:title="设置"/>
                 <item
                     android:id="@+id/help"
-                    android:icon="@mipmap/ic_help_grey600_24dp"
-                    android:title="帮助"/>
+                    android:icon="@mipmap/ic_info_outline_cyan_a200_24dp"
+                    android:title="关于"/>
     </group>
 </menu>

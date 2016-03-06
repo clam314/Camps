@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="clam314"
+            android:text="UserName"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:gravity="center_vertical"/>
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="clam9559@gmial.com"
+            android:text="User@mail.com"
             android:textColor="@color/white_gray"
             android:textSize="14sp"
             android:gravity="center_vertical"/>

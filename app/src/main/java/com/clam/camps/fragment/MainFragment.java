@@ -2,11 +2,9 @@ package com.clam.camps.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +25,7 @@ public class MainFragment  extends Fragment {
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private TabAdapter tabAdapter;
-
+    private List<Fragment> list = new ArrayList<>();
 
     @Nullable
     @Override
@@ -38,46 +36,43 @@ public class MainFragment  extends Fragment {
     }
 
     private void initView() {
-        List<Fragment> list = new ArrayList<>();
-
 
         list.add(new LastFragment());
-        list.add(new AndroidFragment("App"));
-        list.add(new AndroidFragment("Android"));
-        list.add(new AndroidFragment("iOS"));
-        list.add(new AndroidFragment("前端"));
-        list.add(new BeenFragment("福利"));
+        list.add(new CategoryFragment("App"));
+        list.add(new CategoryFragment("Android"));
+        list.add(new CategoryFragment("iOS"));
+        list.add(new CategoryFragment("前端"));
+        list.add(new BeenFragment("福利",false));
 
 
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) view.findViewById(R.id.tabs_ly);
+
         tabAdapter = new TabAdapter(getContext(), list, getChildFragmentManager());
         viewPager.setAdapter(tabAdapter);
         viewPager.setOffscreenPageLimit(6);
+
+       // viewPager.setCurrentItem(0);
+    }
+
+
+    @Override
+    public void onStart() {
+        tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs_ly);
         tabLayout.setupWithViewPager(viewPager);
-        viewPager.setCurrentItem(0);
+        super.onStart();
     }
 
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("Fragment","mainFragment onstop");
-        super.onDetach();
-        viewPager.removeAllViews();
-    }
-
-    @Override
-    public void onDetach() {
-        Log.d("Fragment","mainFragment ondetach");
-        super.onDetach();
-        viewPager.removeAllViews();
-    }
-
-    @Override
-    public void onDestroyView() {
-        Log.d("Fragment","mainFragment ondestroyview");
-        super.onDestroyView();
-        viewPager.removeAllViews();
+    public void refresh(){
+        switch (viewPager.getCurrentItem()){
+            case 0:
+                ((LastFragment)list.get(0)).refresh();
+                break;
+            case 5:
+                ((BeenFragment)list.get(5)).refresh();
+                break;
+            default:
+                ((CategoryFragment)list.get(viewPager.getCurrentItem())).refresh();
+                break;
+        }
     }
 }

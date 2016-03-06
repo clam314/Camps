@@ -1,6 +1,9 @@
 package com.clam.camps.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +20,7 @@ import java.util.List;
 /**
  * Created by clam314 on 2016/3/3.
  */
-public class AndroidRecycleViewAdapter extends RecyclerView.Adapter {
+public class AndroidRecycleViewAdapter extends RecyclerView.Adapter{
 
     private Activity activity;
     private List<Result> list;
@@ -34,18 +37,23 @@ public class AndroidRecycleViewAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Log.d("adapter","onBindViewHolder");
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         ItemHolder itemHolder = (ItemHolder)holder;
-        Log.d("list", " onbind  "+list.get(position).getDesc());
         itemHolder.textView_desc.setText(list.get(position).getDesc());
         itemHolder.textView_time.setText(list.get(position).getPublishedAt().substring(5, 10));
         itemHolder.textView_who.setText(list.get(position).getWho());
+        itemHolder.cardView_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(list.get(position).getUrl()));
+                activity.startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        Log.d("adapter","getItemCount");
 
         return list!=null?list.size():0;
     }
@@ -55,17 +63,20 @@ public class AndroidRecycleViewAdapter extends RecyclerView.Adapter {
         return new ItemHolder(inflater.inflate(R.layout.card_android,parent,false));
     }
 
+
     private class ItemHolder extends RecyclerView.ViewHolder{
         private TextView textView_who;
         private TextView textView_time;
         private TextView textView_desc;
-        private ImageView imageView_star;
+        private CardView cardView_category;
+
 
         public ItemHolder(View itemView){
             super(itemView);
             textView_who = (TextView)itemView.findViewById(R.id.tv_who);
             textView_time = (TextView)itemView.findViewById(R.id.tv_time);
             textView_desc = (TextView)itemView.findViewById(R.id.tv_desc);
+            cardView_category = (CardView)itemView.findViewById(R.id.cardview_category);
         }
     }
 }
