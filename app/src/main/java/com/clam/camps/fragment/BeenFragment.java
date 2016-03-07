@@ -101,9 +101,10 @@ public class BeenFragment extends Fragment {
             public void onResponse(Response response) throws IOException {
                 if (!isAdded()) return ;
                 if (response.isSuccessful()) {
-                    String decode = Util.decodeUnicode(response.body().string());
+                    String newdecode = response.body().string();
+                   // String decode = Util.decodeUnicode(response.body().string());
                     // Log.d("result","decode "+decode);
-                    Category results = gson.fromJson(decode, Category.class);
+                    Category results = gson.fromJson(newdecode, Category.class);
                     if (results.results.size()!=0) {
                         adapter.setList(results.results);
                         getActivity().runOnUiThread(new Runnable() {
@@ -141,7 +142,7 @@ public class BeenFragment extends Fragment {
                     OkHttpUtil.execute(request, new Callback() {
                         @Override
                         public void onFailure(Request request, IOException e) {
-                            Toast.makeText(getActivity(), "没有网络", Toast.LENGTH_SHORT).show();
+
                             loading = false;
                             page--;
                         }
@@ -169,7 +170,7 @@ public class BeenFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-            }else if (totalItemCount - 1 <= lastVisibleItem){
+            }else if (totalItemCount>20 && totalItemCount - 1 <= lastVisibleItem){
                 Toast.makeText(getActivity(),"没有更多了~",Toast.LENGTH_SHORT).show();
             }
         }

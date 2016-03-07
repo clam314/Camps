@@ -63,10 +63,7 @@ public class CategoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_android,container,false);
         results = null;
-       // List<String> hasData = dataBase.loadData("Last","response");
-     //   if(hasData.size() != 0){
-       //     results = gson.fromJson(hasData.get(0),Results.class);
-       // }
+
         recyclerView = (RecyclerView)view.findViewById(R.id.recyleview_android);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new AndroidRecycleViewAdapter(getActivity(),results);
@@ -97,9 +94,9 @@ public class CategoryFragment extends Fragment {
             public void onResponse(Response response) throws IOException {
                 if (!isAdded()) return ;
                 if (response.isSuccessful()) {
-                    String decode = Util.decodeUnicode(response.body().string());
-                   // Log.d("result","decode "+decode);
-                    Category results = gson.fromJson(decode, Category.class);
+                   // String decode = Util.decodeUnicode(response.body().string());
+                    String newdecode = response.body().string();
+                    Category results = gson.fromJson(newdecode, Category.class);
                     if (results.results.size()!=0) {
                         adapter.setList(results.results);
                         if (getActivity()!=null){

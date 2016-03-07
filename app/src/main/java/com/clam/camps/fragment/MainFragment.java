@@ -45,13 +45,13 @@ public class MainFragment  extends Fragment {
         list.add(new BeenFragment("福利",false));
 
 
+
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
         tabAdapter = new TabAdapter(getContext(), list, getChildFragmentManager());
         viewPager.setAdapter(tabAdapter);
         viewPager.setOffscreenPageLimit(6);
 
-       // viewPager.setCurrentItem(0);
     }
 
 

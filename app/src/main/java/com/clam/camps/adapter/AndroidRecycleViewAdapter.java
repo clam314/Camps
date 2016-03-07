@@ -64,7 +64,7 @@ public class AndroidRecycleViewAdapter extends RecyclerView.Adapter{
     }
 
 
-    private class ItemHolder extends RecyclerView.ViewHolder{
+    private static class ItemHolder extends RecyclerView.ViewHolder{
         private TextView textView_who;
         private TextView textView_time;
         private TextView textView_desc;

@@ -92,10 +92,12 @@ public class LastFragment extends Fragment  {
             public void onResponse(Response response) throws IOException {
                 if (!isAdded()) return ;
                 if (response.isSuccessful()) {
-                    String decode = Util.decodeUnicode(response.body().string());
-                    Results results = gson.fromJson(decode, Results.class);
+                  //  String newdecode = new String(response.body().bytes(),"UTF-8");
+                   // String decode = Util.decodeUnicode(response.body().string());
+                    String newdecode = response.body().string();
+                    Results results = gson.fromJson(newdecode, Results.class);
                     if (results.category.size() != 0) {
-                        dataBase.saveTheLastData(decode);
+                        dataBase.saveTheLastData(newdecode);
                         adapter.setResults(results);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override

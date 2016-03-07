@@ -133,7 +133,7 @@ public class LastRecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerView.
     }
 
 
-    private class CardImageHolder extends RecyclerView.ViewHolder{
+    private static class CardImageHolder extends RecyclerView.ViewHolder{
         public LinearLayout layout;
         public TextView textView_title;
         public TextView textView_date;
@@ -146,7 +146,7 @@ public class LastRecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    private class CardHolder extends RecyclerView.ViewHolder{
+    private static class CardHolder extends RecyclerView.ViewHolder{
         public LinearLayout layout;
         public TextView textView_title;
         public TextView textView_date;

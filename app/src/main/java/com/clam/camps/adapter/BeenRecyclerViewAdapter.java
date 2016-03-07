@@ -131,7 +131,7 @@ public class BeenRecyclerViewAdapter extends RecyclerView.Adapter {
         // The start bounds are the global visible rectangle of the thumbnail,
         // 同时设置container viewr的偏移量为边界的起点，因为这是positioning animation 参数（X,Y)的起点。
         thumbView.getGlobalVisibleRect(startBounds);
-        //activity.getWindow().getDecorView().findViewById(android.R.id.content).getGlobalVisibleRect(finalBounds, globalOffset);
+
         beenFragment.getView().findViewById(R.id.fl_content).getGlobalVisibleRect(finalBounds,globalOffset);
         startBounds.offset(-globalOffset.x, -globalOffset.y );
         finalBounds.offset(-globalOffset.x, -globalOffset.y );
@@ -157,9 +157,9 @@ public class BeenRecyclerViewAdapter extends RecyclerView.Adapter {
         }
 
         // 隐藏缩略图，显示放大view。当动画开始时，将把放大view安放在缩略图的位置。
-       // thumbView.setAlpha(0f);
+
         expandedImageView.setVisibility(View.VISIBLE);
-        //expandedImageView.setAlpha(1f);
+
 
         // 设置轴心点，为了SCALE_X和SCALE_Y转换到放大view的左上角（默认轴心点是view的中心）
         expandedImageView.setPivotX(0f);

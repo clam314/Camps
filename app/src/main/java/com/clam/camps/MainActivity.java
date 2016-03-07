@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -103,10 +104,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.refresh:
-                if(MainFragment.class == fragmentManager.findFragmentById(R.id.fragment_main).getClass()){
-                    ((MainFragment)fragmentManager.findFragmentById(R.id.fragment_main)).refresh();
-                }else if(BeenFragment.class == fragmentManager.findFragmentById(R.id.fragment_main).getClass()){
-                    ((BeenFragment)fragmentManager.findFragmentById(R.id.fragment_main)).refresh();
+                if(MainFragment.class == mContent.getClass()){
+                    Log.d("refresh","mainfragment refresh");
+                    ((MainFragment)mContent).refresh();
+                }else if(BeenFragment.class == mContent.getClass()){
+                    ((BeenFragment)mContent).refresh();
+                    Log.d("refresh", "beenfragment refresh");
                 }
             }
         return super.onOptionsItemSelected(item);
