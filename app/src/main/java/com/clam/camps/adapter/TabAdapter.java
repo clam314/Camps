@@ -39,5 +39,6 @@ public class TabAdapter  extends FragmentStatePagerAdapter{
         return list.size();
     }
 
+    //
 
 }
